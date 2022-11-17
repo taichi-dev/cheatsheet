@@ -1,4 +1,4 @@
-# Taichi Languge Cheatsheet
+# Taichi Language Cheatsheet
 
 ## How to build
 
