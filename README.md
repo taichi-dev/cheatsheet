@@ -3,7 +3,9 @@
 ## Preview
 
 <div align="center">
+
 ![](./cheatsheet.png)
+
 </div>
 
 ## How to build
