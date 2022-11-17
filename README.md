@@ -2,8 +2,9 @@
 
 ## Preview
 
-<img style="margin:0px auto;display:block" src="./cheatsheet.png" width="600" />
-
+<div align="center">
+![](./cheatsheet.png)
+</div>
 
 ## How to build
 
