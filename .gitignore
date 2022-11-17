@@ -1,0 +1,17 @@
+# built cheatsheets and handouts
+# ----------------------------------
+cheatsheets*.pdf
+
+# TeX auxiliary files
+# ----------------------------------
+*.aux
+*.log
+*.out
+*.upa
+
+# generated figures
+# ----------------------------------
+fonts/**/*.[ot]tf
+
+# OS specific
+.DS_Store

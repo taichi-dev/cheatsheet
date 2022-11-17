@@ -1,0 +1,624 @@
+% !TeX TS-program = xelatex
+
+\documentclass[10pt,landscape,a4paper]{article}
+
+\usepackage[framemethod=TikZ]{mdframed}
+\mdfsetup{skipabove=0pt,skipbelow=0pt}
+
+\usepackage{multicol}
+\usepackage{colortbl}
+\usepackage{array, multirow}
+
+\usepackage[right=2.5mm, left=2.5mm, top=2.5mm, bottom=2.5mm]{geometry}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage[percent]{overpic}
+\graphicspath{{./images}}
+\usepackage[export]{adjustbox}
+
+\usepackage[framemethod=TikZ]{mdframed}
+\mdfsetup{skipabove=0pt,skipbelow=0pt}
+\usepackage{menukeys}
+
+\usepackage{xcolor}
+\colorlet{citecolor}{black}
+\colorlet{linkcolor}{black}
+\colorlet{urlcolor}{black}
+\usepackage[
+  bookmarks=true,
+  breaklinks=true,
+  pdfborder={0 0 0},
+  citecolor=citecolor,
+  linkcolor=linkcolor,
+  urlcolor=urlcolor,
+  colorlinks=true,
+  linktocpage=false,
+  hyperindex=true,
+  colorlinks=true,
+  linktocpage=false,
+  linkbordercolor=white]{hyperref}
+
+\usepackage{fontspec}
+\usepackage[fixed]{fontawesome5}
+\usepackage[babel=true]{microtype}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Source Serif Pro}[
+  Path           = fonts/source-serif-pro/SourceSerifPro-,
+  Extension      = .otf,
+  UprightFont    = Regular,
+  ItalicFont     = LightIt,
+  BoldFont       = Semibold,
+  BoldItalicFont = It ]
+\newfontfamily\RobotoSlab{Roboto Slab}[
+  Path        = fonts/roboto-slab/RobotoSlab-,
+  Extension   = .ttf,
+  UprightFont = Light,
+  BoldFont    = Regular ]
+
+\definecolor{secbgcol}{HTML}{2D3E40}
+\definecolor{highlight}{HTML}{36A8B2}
+\definecolor{secftcol}{HTML}{ffffff}
+\definecolor{doccol}{HTML}{4cbdc7}
+\definecolor{myblue}{HTML}{12558c}
+
+\usepackage{listings}
+\definecolor{lightblue}{RGB}{240,245,255}
+\definecolor{darkblue}{RGB}{40,40,85}
+\lstset{
+    language=Python,
+    backgroundcolor = \color{lightblue},
+    basicstyle=\tiny\ttfamily,
+    breaklines=true,
+    showstringspaces=false,
+    keywordstyle=\color{green!35!black},
+    commentstyle=\selectfont\color{gray},
+    numberstyle=\color{blue},
+    morekeywords={constexpr},
+    classoffset=1,
+    morekeywords={dense},
+    keywordstyle=\color{myblue},
+    classoffset=2,
+    morekeywords={
+        ti, Vector, Matrix, Struct, kernel, quant, float,
+        root, hash, Index, Indices, field, vector, matrix,
+        init, ndarray, fill, types, grouped, ndrange, dynamic,
+        from_numpy, from_torch, to_numpy, to_torch, cpu, cast,
+        struct, vec3, kernel, assume_in_range, block_dim, layout
+    },
+    keywordstyle=\color{highlight},
+    classoffset=3,
+    morekeywords={place, f32, f64, u8, u16, u32, u64, i8, i16, i32, i64, f16, float, int},
+    keywordstyle=\color{highlight},
+%    moredelim=**[is][\color{red}]{@}{@},
+    xleftmargin=0.1cm,
+    xrightmargin=0.1cm,
+    frame=tlbr,
+    framesep=0.1cm,
+    framerule=0pt,
+}
+\newcommand{\lcode}[1]{\lstinline[basicstyle=\scriptsize\ttfamily]{#1}}
+\setlength\parindent{0pt}
+\setlength{\tabcolsep}{2pt}
+\baselineskip=0pt
+\setlength\columnsep{0.5em}
+
+\newcommand{\offset}{\vspace*{0.4em}}
+
+\newcommand{\API}[1]{\tikz[baseline=(X.base)]
+  \node [fill=doccol, rectangle, inner sep=2pt,rounded corners=1pt] (X)
+        {\href{#1}{\color{white}{\tiny \sffamily \textbf{DOC}}}};}
+
+
+\newenvironment{myboxed}[1]
+{\begin{mdframed}[linecolor=black,
+                  backgroundcolor=white,
+                  outerlinewidth=0.25pt,
+                  %roundcorner=0.25em,
+                  innertopmargin=1ex,
+                  topline=true,
+                  rightline=true,
+                  leftline=true,
+                  bottomline=true,
+                  linecolor=black!0,
+                  frametitleaboveskip=0.5em,
+                  frametitlebelowskip=0.5em,
+                  innerbottommargin=.5\baselineskip,
+                  innerrightmargin=.5em,
+                  innerleftmargin=.5em,
+                  %userdefinedwidth=1\textwidth,
+                  % frametitle={\scshape \bfseries \sffamily #1},
+                  frametitle={\footnotesize\color{secftcol}\RobotoSlab \bfseries \hspace*{0mm} #1},
+                  % frametitlerule=true,
+                  %frametitlerulecolor=red,
+                  frametitlebackgroundcolor=secbgcol,
+                  frametitlerulewidth=2pt]}
+{\end{mdframed}}
+
+\begin{document}
+\thispagestyle{empty}
+% \footnotesize
+\scriptsize
+\begin{multicols*}{5}
+
+\begin{overpic}[width=\columnwidth,tics=6, trim=-10 10 0 0, clip]{taichi-lang-logo.png}
+\end{overpic}
+\vspace{\fill}
+
+\begin{myboxed}{Installation}
+\begin{lstlisting}
+pip install -U taichi  # Install / upgrade
+ti gallery             # Run demo gallery
+ti example             # More examples
+\end{lstlisting}
+\end{myboxed}
+
+\begin{myboxed}{Quick start \hfill \API{https://docs.taichi-lang.org/docs/hello_world}}
+\begin{lstlisting}
+import taichi as ti
+ti.init(arch=ti.cpu)
+# Or use another backend
+# [ti.cuda, ti.vulkan, ti.opengl, ti.metal]
+
+@ti.kernel
+# Args and return of a kernel must be type hinted
+def monte_carlo_pi(n: int) -> float:
+    total = 0
+    for i in range(n): # A parallel for loop
+        x = ti.random()
+        y = ti.random()
+        if x*x + y*y < 1:
+            total += 1
+
+    return 4 * total / n
+
+print(monte_carlo_pi(100000))
+\end{lstlisting}
+\end{myboxed}
+
+\begin{myboxed}{Kernels and functions \hfill \API{https://docs.taichi-lang.org/docs/kernel\_function}}
+\offset
+\verb|@ti.kernel|: Entrance for Taichi's JIT to take control. Must be called from Python scope. Require type hints for the arguments and the return
+  value. Can return at most one scalar or vector or matrix. Top-level for loops are automatically parallelized.
+
+\quad
+
+\verb|@ti.func|: Must be called by kernels or other Taichi functions. Recommend type hints for arguments and return
+  values. Can return multiple values of scalars, vectors, matrices, and structs.\\
+
+
+\textbf{Top-level for loops are automatically parallelized}
+\begin{lstlisting}
+x = ti.field(dtype=int, shape=100)
+@ti.kernel
+def loop_field():
+    for i in range(100):  # A parallelized loop
+        for j in range(10):  # Not parallelized
+            ...
+    for i in x:  # Also a parallelized loop
+        x[i] = i
+\end{lstlisting}
+
+\textbf{Serialize a top-level for loop}
+\begin{lstlisting}
+@ti.kernel
+def config_loop():
+    # Serialize the *next* for loop
+    ti.loop_config(serialize=True)
+    for i in range(100):  # Serial
+        ...
+    for i in range(100):  # Parallel
+        ...
+\end{lstlisting}
+
+\textbf{Interact with NumPy/PyTorch \hfill \API{https://docs.taichi-lang.org/docs/external}}
+\begin{lstlisting}
+x = numpy/torch.arange(12).reshape(3, 4)
+@ti.kernel
+def fill_array(arr: ti.types.ndarray()):
+    print(arr.shape, arr.dtype)
+    for i, j in arr:
+        arr[i, j] = i + j
+        print(arr[i, j])
+
+fill_array(x)  # zero copy if on the same device
+\end{lstlisting}
+\end{myboxed}
+\vspace{\fill}
+
+\begin{myboxed}{Data types \hfill \API{https://docs.taichi-lang.org/docs/type}}
+\offset
+\textbf{Primitive types} (int, unsigned int and float in C)
+\vspace{-2em}
+\begin{multicols*}{3}
+\begin{lstlisting}
+i8  # char
+i16 # short
+i32 # int
+i64 # long
+\end{lstlisting}
+
+\begin{lstlisting}
+u8  # uchar
+u16 # ushort
+u32 # uint
+u64 # ulong
+\end{lstlisting}
+
+\begin{lstlisting}
+f16 # half
+f32 # float
+f64 # double
+\end{lstlisting}
+\end{multicols*}
+\vspace{-1.5em}
+\textbf{Vector and matrix types}\offset\\
+\hspace*{1mm}\raisebox{0.5pt}{\tiny$\bullet$}~\textbf{Vector}: \lcode{ti.types.vector(dim, dtype)}
+\begin{lstlisting}
+vec3 = ti.types.vector(3, float)
+v = vec3(1, 2, 3)
+\end{lstlisting}
+\hspace*{1mm}\raisebox{0.5pt}{\tiny$\bullet$}~\textbf{Matrix}: \lcode{ti.types.matrix(n, m, dtype)}
+\begin{lstlisting}
+mat2 = ti.types.matrix(2, 2, float)
+m = mat2(1, 2, 3, 4)
+\end{lstlisting}
+\textbf{Struct types}: \lcode{ti.types.struct(**kwargs)}
+\begin{lstlisting}
+sphere = ti.types.struct(
+    center=vec3, radius=float
+)
+s = sphere(vec3(1, 2, 3), 1.0)
+\end{lstlisting}
+
+\textbf{Ndarray types}:
+\begin{lstlisting}
+ti.types.ndarray(dtype,
+    element_dim, # 0/1/2 for 
+                 # scalar/vector/matrix elements
+    element_shape, # Shapes of each element
+    field_dim # Number of field dimensions
+)
+\end{lstlisting}
+\begin{lstlisting}
+img2d_type = ti.types.ndarray(elemen_dim=1)
+noise_img = np.random.random((400, 400, 3))
+
+@ti.kernel
+def process(img: img2d_type):
+    for I in ti.grouped(img):
+        r, g, b = img[I]
+        ...
+
+process(noise_img)
+\end{lstlisting}
+
+\textbf{Typecasting}
+\begin{lstlisting}
+x = ti.f32(1)
+y = ti.u8(x)  # Equivalent to x.cast(ti.u8)
+z = float(y)
+
+u = vec3(0.5, 1.0, 1.5)
+v = u.cast(int)  # Cast each entry to int
+\end{lstlisting}
+\end{myboxed}
+\vspace{\fill}
+
+\begin{myboxed}{Performance tuning \hfill \API{https://docs.taichi-lang.org/docs/performance}}
+\textbf{Kernel profiler} (CPU and CUDA only)\offset\\
+Analyze the performance of Taichi kernels
+\begin{lstlisting}
+ti.init(arch=ti.cpu, kernel_profiler=True)
+@ti.kernel
+def some_kernel():
+    ...
+
+some_kernel()
+ti.profiler.print_kernel_profiler_info()
+\end{lstlisting}
+  
+\textbf{Configure loops}\offset\\
+Set arguments in \lcode{ti.loop_config()} to control the next for loop:\\
+1. Set the number of threads in a block on GPU:\\
+\lstinline[basicstyle=\scriptsize\ttfamily]{block_dim=8}.\\
+2. Set the number of threads to use on CPU:\\
+\lstinline[basicstyle=\scriptsize\ttfamily]{parallelize=8}.\\
+3. Whether to let the for loop execute serially:\\
+\lstinline[basicstyle=\scriptsize\ttfamily]{serialize=True}.
+\end{myboxed}
+\vspace{\fill}
+
+
+\begin{myboxed}{Data containers \hfill \API{https://docs.taichi-lang.org/docs/field}}
+\offset
+\textbf{Scalar field}: \lstinline[basicstyle=\scriptsize\ttfamily]{field(dtype, …)}
+\begin{lstlisting}
+f = ti.field(int, shape=(3, 3, 3))
+f[0, 1, 2] = 3  # Indexing with three integers
+x = ti.field(int, shape=()) # 0-D field
+x[None] = 1.0 # Use None to index 0-D field
+\end{lstlisting}
+\textbf{Vector field}: \lstinline[basicstyle=\scriptsize\ttfamily]{Vector.field(dim, dtype, …)}
+\begin{lstlisting}
+f = ti.Vector.field(3, float, (10, 10))
+f[0, 1] = 1, 2, 3  # Each entry is a 3D vector
+\end{lstlisting}
+\textbf{Matrix field}: \lstinline[basicstyle=\scriptsize\ttfamily]{Matrix.field(n, m, dtype, …)}
+\begin{lstlisting}
+f = ti.Matrix.field(2, 2, float, shape=(10, 10))
+f[0, 1] = mat2(1) # Each entry is a 2x2 matrix
+\end{lstlisting}
+\textbf{Struct field}: \lstinline[basicstyle=\scriptsize\ttfamily]{obj.field(shape)}
+\begin{lstlisting}
+sphere = ti.types.struct(center=vec3, radius=float)
+f = sphere.field(shape=100)
+\end{lstlisting}
+
+\textbf{Fill a field with a scalar}
+\begin{lstlisting}
+f.fill(1)
+\end{lstlisting}
+
+\textbf{Copy data from/to NumPy array/PyTorch tensor}
+\begin{lstlisting}
+f.from_numpy(arr)
+arr = f.to_numpy()
+f.from_torch(tensor)
+tensor = f.to_torch()
+\end{lstlisting}
+
+\textbf{Loop over a field in parallel}
+\begin{lstlisting}
+f = ti.field(int, shape=(100, 100, 100))
+@ti.kernel
+def loop_field():
+    for i, j, k in ti.ndrange(100, 100, 100):
+        f[i, j, k] = i + j + k
+    # Equivalent to the above
+    for i, j, k in f:
+        f[i, j,k] = i + j + k
+    # Equivalent to the above
+    for I in ti.grouped(f):
+        # I = [i, j, k] is a 3D int vector
+        f[I] = I[0] + I[1] + I[2]
+\end{lstlisting}
+
+\textbf{Switch data layout between AOS and SOA\hfill\API{https://docs.taichi-lang.org/docs/layout}}
+\begin{lstlisting}
+u = ti.Vector.field(
+    3, float,shape=100, layout=ti.Layout.AOS)
+# array of structs [x0,y0,z0,x1,y1,z1,…]
+v = ti.Vector.field(
+    3, float,shape=100, layout=ti.Layout.SOA)
+# struct of arrays [x0,x1,…,y0,y1,…,z0,z1,…]
+\end{lstlisting}
+\end{myboxed}
+
+
+\begin{myboxed}{Math functions \hfill \API{https://docs.taichi-lang.org/docs/math_module}}
+%\vspace{-1.5em}
+\begin{minipage}[c]{0.43\linewidth}
+\begin{lstlisting}
+import taichi as ti
+
+ti.cos(x)
+ti.sin(x)
+ti.acos(x)
+ti.asin(x)
+ti.atan2(y, x)
+ti.exp(x)
+ti.log(x)
+ti.ceil(x, dtype)
+ti.floor(x, dtype)
+ti.round(x, dtype)
+ti.pow(x, a)
+ti.tan(x)
+ti.tanh(x)
+ti.sqrt(x)
+ti.max(x,y,…)
+ti.min(x,y,…)
+ti.random(dtype)
+\end{lstlisting}
+\end{minipage}
+\quad \begin{minipage}[c]{0.52\linewidth}
+\begin{lstlisting}
+import taichi.math as tm
+
+tm.cross(u,v)
+tm.dot(u,v)
+tm.fract(x) 
+tm.mod(x,y)
+tm.normalize(v)
+tm.smoothstep(e0,e1,x)
+tm.mix(x,y,a)
+tm.step(edge,x)
+tm.degrees(x)
+tm.radians(x)
+tm.clamp(x,xmin,xmax)
+tm.length(v)
+tm.log2(x)
+tm.inverse(mat)
+tm.isnan(x)
+tm.isinf(x)
+tm.sign(x)
+\end{lstlisting}
+\end{minipage}
+
+\end{myboxed}
+\vspace{\fill}
+
+\begin{myboxed}{Operators \hfill \API{https://docs.taichi-lang.org/docs/operator}}
+\offset
+\textbf{Arithmetic operators}
+\begin{lstlisting}
+-x, x + y, x - y, x * y,
+x / y, # returns a floating point. 5 / 2 = 2.5
+x // y # floor of x / y. 5.0 / 2.0 = 2.0
+x % y  # remainder of x / y. x & y can be floats
+x ** y # x to the power of y
+A @ B  # matrix multiplication
+\end{lstlisting}
+
+\textbf{Comparison operators}
+\begin{lstlisting}
+x == y, x != y, x > y, x < y, x >= y, x <= y
+\end{lstlisting}
+
+\textbf{Logical operators}
+\begin{lstlisting}
+not, or, and
+\end{lstlisting}
+
+\textbf{Bitwise operators}
+\begin{lstlisting}
+~x, x & y, x ^ y, x | y, x << y, x >> y
+\end{lstlisting}
+\end{myboxed}
+
+\begin{myboxed}{Data-oriented programming \hfill
+    \API{https://docs.taichi-lang.org/docs/odop}}
+\offset
+\textbf{Data-oriented class}
+
+When you have data maintained in the Python scope (such as time or user input events) and you want the kernels to track their changes, you can organize them into a data-oriented class.
+\begin{lstlisting}
+@ti.data_oriented
+class TiArray:
+    def __init__(self, n): 
+        self.x = ti.field(dtype=ti.i32, shape=n) 
+    
+    @ti.kernel
+    def inc(self): 
+        for i in self.x: 
+            self.x[i] += 1 
+
+a = TiArray(32)
+a.inc()
+\end{lstlisting}
+
+\textbf{dataclass}
+
+A dataclass is a wrapper of \lcode{ti.types.struct}. You can define Taichi functions as its methods and call these methods in the Taichi scope.
+\begin{lstlisting}
+@ti.dataclass
+class Sphere:
+    center: vec3
+    radius: float
+    @ti.func
+    def area(self): # A Taichi function as method
+        return 4 * pi * self.radius**2
+
+@ti.kernel
+def test():
+    sphere = Sphere(vec3(0), radius=1.0)
+    print(sphere.area())
+\end{lstlisting}
+\end{myboxed}
+\vspace{\fill}
+
+
+\begin{myboxed}{Global settings \hfill
+    \API{https://docs.taichi-lang.org/docs/global\_settings}}
+\offset
+You can config Taichi by passing arguments to the \lcode{ti.init()} call:
+
+1. Choose a backend: \lcode{arch=ti.cuda}.\\
+2. Enable debug mode: \lcode{debug=True}.\\
+3. Enable dynamic index: \lcode{dynamic_index=True}.\\ 
+4. Set floating precision: \lcode{default_fp=ti.f64}.\\
+5. Set integer precision: \lcode{default_ip=ti.i64}.\\
+6. Set random seed: \lcode{random_seed=0}.\\
+7. Disable offline cache: \lcode{offline_cache=False}.\\
+8. Enable packed mode: \lcode{packed=True}.\\
+9. Set logging level: \lcode{log_level=ti.ERROR}.\\
+10. Set pre-allocated memory size for CUDA:\\
+\lcode{device_memory_GB=1.3}.
+\end{myboxed}
+\vspace{\fill}
+
+\begin{myboxed}{Visualization}
+\offset
+\textbf{GUI system \hfill \API{https://docs.taichi-lang.org/docs/gui_system}}
+\begin{lstlisting}
+pixels = ti.Vector.field(3, float, (640, 480))
+gui = ti.GUI('Window Title', res=(640, 480))
+while not gui.get_event(ti.GUI.ESCAPE,
+                        ti.GUI.EXIT):
+    gui.set_image(pixels)
+    gui.show()
+\end{lstlisting}
+  
+\textbf{GGUI system \hfill \API{https://docs.taichi-lang.org/docs/ggui}}
+\begin{lstlisting}
+pixels = ti.Vector.field(3, float, (640, 480))
+window = ti.ui.Window('Window Title', (640, 480))
+canvas = window.get_canvas()
+
+while window.running:
+    canvas.set_image(pixels)
+    window.show()
+    
+window.save_image(filename) # save image file
+\end{lstlisting}
+
+\textbf{2D canvas drawing API}
+\begin{lstlisting}
+canvas.set_background_color(color)
+canvas.triangles(vertices, color, indices, per_vertex_color)
+canvas.circles(vertices, radius, color, per_vertex_color)
+canvas.lines(vertices, width, indices, color, per_vertex_color)
+\end{lstlisting}
+
+\textbf{3D scene drawing API}
+\begin{lstlisting}
+scene.lines(vertices, width, indices, color, per_vertex_color)
+scene.mesh(vertices, indices, normals, color, per_vertex_color)
+scene.particles(vertices, radius, color, per_vertex_color)
+\end{lstlisting}
+\end{myboxed}
+\vspace{\fill}
+
+\begin{myboxed}{Debugging \lcode{ti.init(..., debug=True)} \hfill
+    \API{https://docs.taichi-lang.org/docs/debugging}}
+\offset
+Debug mode can help check access out-of-bound errors and allow you to \lcode{assert} in Taichi kernels on CPU and CUDA backends.
+\begin{lstlisting}
+ti.init(arch=ti.cpu, debug=True)
+f = ti.field(int, shape=(5, 5))
+print(f[7, 7])  # Only raise error in debug mode!
+\end{lstlisting}
+\textbf{Runtime assert in Taichi kernels and functions}
+\begin{lstlisting}
+x = ti.field(dtype=ti.f32, shape=128)
+@ti.kernel
+def foo():
+    for i in x:
+        assert x[i] >= 0
+        x[i] = ti.sqrt(x[i])
+\end{lstlisting}
+\textbf{Runtime print in Taichi kernels and functions}
+\begin{lstlisting}
+@ti.kernel
+def inside_taichi_scope(x: float):
+    print('hello', x)  # Cannot use f-string
+\end{lstlisting} 
+\textbf{Compile-time static-print}
+\begin{lstlisting}
+x = ti.field(ti.f32, (2, 3))
+@ti.kernel
+def print_field_attributes():
+    ti.static_print(x.shape, x.dtype)
+\end{lstlisting}
+  
+\textbf{Compile-time static-assert}
+\begin{lstlisting}
+@ti.func # Assuming dst and src are fields
+def copy(dst: ti.template(), src: ti.template()):
+    ti.static_assert(dst.shape == src.shape)
+    for I in ti.grouped(src):
+        dst[I] = src[I]
+\end{lstlisting}
+\end{myboxed}
+
+\end{multicols*}
+\end{document}
