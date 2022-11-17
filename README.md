@@ -1,5 +1,10 @@
 # Taichi Language Cheatsheet
 
+## Preview
+
+<img style="margin:0px auto;display:block" src="./cheatsheet.png" width="600" />
+
+
 ## How to build
 
 1. Go to the `fonts/` folder, run
@@ -14,5 +19,3 @@
     ```bash
     xelatex cheatsheet.tex
     ```
-
-<img style="margin:0px auto;display:block" src="./cheatsheet.png" width="600" />
