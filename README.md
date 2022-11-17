@@ -4,7 +4,8 @@
 
 <div align="center">
 
-![cheatsheet](https://user-images.githubusercontent.com/23307174/202497176-c105d3f4-fa48-4b36-9eab-a99b5617f1a4.png)
+![cheatsheet](https://user-images.githubusercontent.com/23307174/202497553-221ab05c-c711-49d3-ad08-b5432f592c7d.svg)
+
 
 </div>
 
