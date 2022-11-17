@@ -9,7 +9,7 @@
     
     to download the font files.
 
-2. Use `xelatex` to compile the source tex:
+2. Use `xelatex` to compile the tex source file:
 
     ```bash
     xelatex cheatsheet.tex
