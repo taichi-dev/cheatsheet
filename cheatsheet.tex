@@ -542,8 +542,7 @@ You can config Taichi by passing arguments to the \lcode{ti.init()} call:
 \begin{lstlisting}
 pixels = ti.Vector.field(3, float, (640, 480))
 gui = ti.GUI('Window Title', res=(640, 480))
-while not gui.get_event(ti.GUI.ESCAPE,
-                        ti.GUI.EXIT):
+while gui.running:
     gui.set_image(pixels)
     gui.show()
 \end{lstlisting}
@@ -553,7 +552,6 @@ while not gui.get_event(ti.GUI.ESCAPE,
 pixels = ti.Vector.field(3, float, (640, 480))
 window = ti.ui.Window('Window Title', (640, 480))
 canvas = window.get_canvas()
-
 while window.running:
     canvas.set_image(pixels)
     window.show()
@@ -600,6 +598,8 @@ def foo():
 \begin{lstlisting}
 @ti.kernel
 def inside_taichi_scope(x: float):
+    # print is supported on cpu, cuda
+    # and vulkan backends
     print('hello', x)  # Cannot use f-string
 \end{lstlisting} 
 \textbf{Compile-time static-print}
