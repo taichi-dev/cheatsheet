@@ -272,15 +272,14 @@ s = sphere(vec3(1, 2, 3), 1.0)
 
 \textbf{Ndarray types}:
 \begin{lstlisting}
-ti.types.ndarray(dtype,
-    element_dim, # 0/1/2 for 
-                 # scalar/vector/matrix elements
-    element_shape, # Shapes of each element
-    field_dim # Number of field dimensions
+ti.types.ndarray(
+    dtype, # Data type of the array,
+    ndim   # Treated as a vector field of
+           # dimension 'ndim'
 )
 \end{lstlisting}
 \begin{lstlisting}
-img2d_type = ti.types.ndarray(elemen_dim=1)
+img2d_type = ti.types.ndarray(ndim=3)
 noise_img = np.random.random((400, 400, 3))
 
 @ti.kernel
