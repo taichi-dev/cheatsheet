@@ -1,6 +1,6 @@
 # built cheatsheets and handouts
 # ----------------------------------
-cheatsheets*.pdf
+cheatsheet*.pdf
 
 # TeX auxiliary files
 # ----------------------------------
