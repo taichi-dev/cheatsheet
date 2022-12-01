@@ -9,6 +9,9 @@ cheatsheet*.pdf
 *.out
 *.upa
 
+*.synctex(busy)
+*.synctex.gz
+
 # generated figures
 # ----------------------------------
 fonts/**/*.[ot]tf
