@@ -140,7 +140,7 @@
 \scriptsize
 \begin{multicols*}{5}
 
-\begin{overpic}[width=\columnwidth,tics=6, trim=-10 10 0 0, clip]{taichi-lang-logo.png}
+\begin{overpic}[width=\columnwidth,tics=6, trim=-10 10 0 0, clip]{taichi-lang-logo.eps}
 \end{overpic}
 \vspace{\fill}
 
@@ -314,7 +314,7 @@ def some_kernel():
 some_kernel()
 ti.profiler.print_kernel_profiler_info()
 \end{lstlisting}
-  
+
 \textbf{Configure loops}\offset\\
 Set arguments in \lcode{ti.loop_config()} to control the next for loop:\\
 1. Set the number of threads in a block on GPU:\\
@@ -424,7 +424,7 @@ import taichi.math as tm
 
 tm.cross(u,v)
 tm.dot(u,v)
-tm.fract(x) 
+tm.fract(x)
 tm.mod(x,y)
 tm.normalize(v)
 tm.smoothstep(e0,e1,x)
@@ -482,13 +482,13 @@ When you have data maintained in the Python scope (such as time or user input ev
 \begin{lstlisting}
 @ti.data_oriented
 class TiArray:
-    def __init__(self, n): 
-        self.x = ti.field(dtype=ti.i32, shape=n) 
-    
+    def __init__(self, n):
+        self.x = ti.field(dtype=ti.i32, shape=n)
+
     @ti.kernel
-    def inc(self): 
-        for i in self.x: 
-            self.x[i] += 1 
+    def inc(self):
+        for i in self.x:
+            self.x[i] += 1
 
 a = TiArray(32)
 a.inc()
@@ -522,15 +522,15 @@ You can config Taichi by passing arguments to the \lcode{ti.init()} call:
 
 1. Choose a backend: \lcode{arch=ti.cuda}.\\
 2. Enable debug mode: \lcode{debug=True}.\\
-3. Enable dynamic index: \lcode{dynamic_index=True}.\\ 
-4. Set floating precision: \lcode{default_fp=ti.f64}.\\
-5. Set integer precision: \lcode{default_ip=ti.i64}.\\
-6. Set random seed: \lcode{random_seed=0}.\\
-7. Disable offline cache: \lcode{offline_cache=False}.\\
-8. Enable packed mode: \lcode{packed=True}.\\
-9. Set logging level: \lcode{log_level=ti.ERROR}.\\
-10. Set pre-allocated memory size for CUDA:\\
-\lcode{device_memory_GB=1.3}.
+3. Set floating precision: \lcode{default_fp=ti.f64}.\\
+4. Set integer precision: \lcode{default_ip=ti.i64}.\\
+5. Set random seed: \lcode{random_seed=0}.\\
+6. Disable offline cache: \lcode{offline_cache=False}.\\
+7. Set logging level: \lcode{log_level=ti.ERROR}.\\
+8. Set pre-allocated memory size for CUDA:\\
+\lcode{device_memory_GB=1.3}.\\
+9. Turn on kernel performance profiler:\\
+\lcode{kernel_profiler=True}.
 \end{myboxed}
 \vspace{\fill}
 
@@ -544,7 +544,7 @@ while gui.running:
     gui.set_image(pixels)
     gui.show()
 \end{lstlisting}
-  
+
 \textbf{GGUI system \hfill \API{https://docs.taichi-lang.org/docs/ggui}}
 \begin{lstlisting}
 pixels = ti.Vector.field(3, float, (640, 480))
@@ -553,7 +553,7 @@ canvas = window.get_canvas()
 while window.running:
     canvas.set_image(pixels)
     window.show()
-    
+
 window.save_image(filename) # save image file
 \end{lstlisting}
 
@@ -599,7 +599,7 @@ def inside_taichi_scope(x: float):
     # print is supported on cpu, cuda
     # and vulkan backends
     print('hello', x)  # Cannot use f-string
-\end{lstlisting} 
+\end{lstlisting}
 \textbf{Compile-time static-print}
 \begin{lstlisting}
 x = ti.field(ti.f32, (2, 3))
@@ -607,7 +607,7 @@ x = ti.field(ti.f32, (2, 3))
 def print_field_attributes():
     ti.static_print(x.shape, x.dtype)
 \end{lstlisting}
-  
+
 \textbf{Compile-time static-assert}
 \begin{lstlisting}
 @ti.func # Assuming dst and src are fields

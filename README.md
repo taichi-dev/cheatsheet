@@ -1,10 +1,10 @@
 # Taichi Language Cheatsheet
 
-## Preview
+## Preview for current Taichi version (v1.4.0)
 
 <div align="center">
 
-![cheatsheet](https://user-images.githubusercontent.com/23307174/202497176-c105d3f4-fa48-4b36-9eab-a99b5617f1a4.png)
+![cheatsheet](https://user-images.githubusercontent.com/23307174/212649338-c6c355bc-7f32-41aa-8647-4376e1163d12.png)
 
 </div>
 
